@@ -30,7 +30,12 @@ public class IslandService {
         final var user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException());
         final var islands = islandRepository.findIslandWithAvailableWorkstations();
 
-        Island freeIsland = islandDomainService.getIslandFreeAndAttachUser(user, islands);
+        //aqui eu fiquei com bastante dúvida do que fazer, pois a lógica deveria ficar na entidade Island
+        //porém a verificação da melhor ilha é feita utilizando uma lista de ilhas e não me pareceu correto passar como parâmetro
+        //no fim resolvi deixar essa parte da lógica ainda no IslandDomainService mas sem saber se é a melhor opção
+        //se puder, gostaria de ter um feedback referente a esta parte
+        Island freeIsland = islandDomainService.getBestFreeIsland(islands);
+        freeIsland.assignUserToTheFirstWorkstationAvailable(user);
 
         islandRepository.save(freeIsland);
     }
