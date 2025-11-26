@@ -1,9 +1,8 @@
 package com.example.demo.domain;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,7 @@ import com.example.demo.Controller.DTO.TicketDTO;
 import com.example.demo.Repository.TicketRepository;
 import com.example.demo.Repository.Entity.Ticket;
 import com.example.demo.Repository.Entity.Ticket.Status;
-import com.example.demo.Repository.Entity.User;
+import com.example.demo.Repository.Entity.TicketUser;
 
 @Service
 public class TicketBusiness {
@@ -34,24 +33,22 @@ public class TicketBusiness {
         }
 
         Ticket newTicket = new Ticket();
-        Set<User> observadores = new HashSet<User>();
-
-        // User criador = userRepository.findById(ticket.criador()).orElseThrow();
-        // User destinatario = userRepository.findById(ticket.criador()).orElse(criador);
-        
-        // for (Integer id : ticket.observadores()) {
-        //     observadores.add(userRepository.findById(id).orElseThrow());
-        // }
-        
-        // newTicket.setCriador(criador);
-        // newTicket.setDestinatario(destinatario);
-        newTicket.setObservadores(observadores);
+        newTicket.setCriadorId(ticket.criador());
+        newTicket.setDestinatarioId(ticket.destinatario());
         newTicket.setObjeto(ticket.objeto());
         newTicket.setAcao(ticket.acao());
         newTicket.setDetalhes(ticket.detalhes());
         newTicket.setLocal(ticket.local());
         newTicket.setStatus(Status.PENDENTE);
 
+        for (Integer id : ticket.observadores()) {
+
+        TicketUser ticketUsers = new TicketUser();
+            ticketUsers.setUserId(id);
+            ticketUsers.setTicket(newTicket);
+            newTicket.getObservadores().add(ticketUsers);
+        }
+        
         ticketRepository.save(newTicket);
     }
 
@@ -79,8 +76,6 @@ public class TicketBusiness {
 
         //updatedTicket.setResponsavel(responsavel);
         updatedTicket.setStatus(ticket.novoStatus());
-
-        updatedTicket.setUpdatedAt(LocalDateTime.now());
 
         ticketRepository.save(updatedTicket);
     }

@@ -1,8 +1,10 @@
 package com.example.demo.Repository.Entity;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,10 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -33,25 +32,17 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "criador_id")
-    private User criador;
+    @Column(nullable = false)
+    private Integer criador_id;
 
-    @ManyToOne
-    @JoinColumn(name = "destinatario_id")
-    private User destinatario;
-    
-    @ManyToOne
-    @JoinColumn(name = "responsavel_id")
-    private User responsavel;
+    @Column
+    private Integer destinatario_id;
 
-    @ManyToMany
-    @JoinTable(
-        name = "tickets_users", 
-        joinColumns = @JoinColumn(name = "user_id"), 
-        inverseJoinColumns = @JoinColumn(name = "ticket_id")
-    )
-    private Set<User> observadores;
+    @Column
+    private Integer responsavel_id;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TicketUser> observadores = new ArrayList<>();
 
     @Column(nullable = false, length = 255)
     private String objeto;
@@ -69,12 +60,6 @@ public class Ticket {
     @Column(nullable = false, length = 255)
     private Status status;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
-
     public Integer getId() {
         return id;
     }
@@ -83,27 +68,27 @@ public class Ticket {
         this.id = id;
     }
 
-    public User getCriador() {
-        return criador;
+    public Integer getCriadorId() {
+        return criador_id;
     }
 
-    public void setCriador(User criador) {
-        this.criador = criador;
+    public void setCriadorId(Integer criador_id) {
+        this.criador_id = criador_id;
     }
 
-    public User getDestinatario() {
-        return destinatario;
+    public Integer getDestinatarioId() {
+        return destinatario_id;
     }
 
-    public void setDestinatario(User destinatario) {
-        this.destinatario = destinatario;
+    public void setDestinatarioId(Integer destinatario_id) {
+        this.destinatario_id = destinatario_id;
     }
 
-    public Set<User> getObservadores() {
+    public List<TicketUser> getObservadores() {
         return observadores;
     }
 
-    public void setObservadores(Set<User> observadores) {
+    public void setObservadores(List<TicketUser> observadores) {
         this.observadores = observadores;
     }
 
@@ -147,27 +132,11 @@ public class Ticket {
         this.status = status;
     }
 
-    public User getResponsavel() {
-        return responsavel;
+    public Integer getResponsavelId() {
+        return responsavel_id;
     }
 
-    public void setResponsavel(User responsavel) {
-        this.responsavel = responsavel;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setResponsavelId(Integer responsavel_id) {
+        this.responsavel_id = responsavel_id;
     }
 }

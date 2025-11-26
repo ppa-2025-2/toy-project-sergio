@@ -1,5 +1,8 @@
 package com.example.demo.Repository.Entity;
 
+import java.util.Objects;
+
+import com.example.demo.Controller.DTO.NewUserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
@@ -20,8 +23,6 @@ public class Profile {
         PROFESSIONAL,
         ENTERPRISE
     }
-
-    
     
     @Id
     private Integer id;
@@ -40,6 +41,16 @@ public class Profile {
 
     public Integer getId() {
         return id;
+    }
+
+
+    public Profile(NewUserDTO newUser) {
+        this.name = newUser.name();
+        this.company = newUser.company();
+        this.type = Objects.requireNonNullElse(newUser.type(), Profile.AccountType.FREE);
+    }
+
+    public Profile() {
     }
 
     public void setId(Integer id) {

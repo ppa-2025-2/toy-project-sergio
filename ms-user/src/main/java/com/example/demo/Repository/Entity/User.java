@@ -3,6 +3,10 @@ package com.example.demo.Repository.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.example.demo.Controller.DTO.NewUserDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +47,18 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    
+
+    public User() {
+    }
+
+    public User(NewUserDTO newUser) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.email = newUser.email();
+        this.password = encoder.encode(newUser.password());
+        this.handle = newUser.handle();
+    }
 
     public Integer getId() {
         return id;

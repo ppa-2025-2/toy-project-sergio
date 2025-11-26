@@ -33,16 +33,13 @@ public class TicketController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
     public void newTicket(@RequestBody TicketDTO ticket) {
-
         ticketBusiness.CadastrarTickets(ticket);
     }
-    // REST -> não pode ter verboas nas URLs
+
     @PatchMapping(value = "{idTicket}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(code = HttpStatus.CREATED)
     public void acceptTicketUser(@PathVariable @NonNull Integer idTicket, 
                                  @RequestBody AcceptTicketDTO ticket) {
-
-
         ticketBusiness.AtualizarTickets(idTicket, ticket);
     }
 

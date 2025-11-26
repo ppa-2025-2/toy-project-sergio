@@ -12,6 +12,7 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
+    "createdBy": 1,
     "email": "batata@potato.com",
     "password": "1234RT56",
     "handle": "papas",
@@ -29,12 +30,13 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-    "email": "gabriel2@email.com",
-    "password": "4321RT65",
-    //"handle": "gabrielg",
-    "name": "Gabriel",
+    "createdBy": 1,
+    "email": "teste@email.com",
+    "password": "123456AbC",
+    "handle": "testesrs",
+    "name": "Mr Testington",
     "roles": [
         "ROLE_USER"
     ],
-    "company": "IFRS PPA"
+    "company": "Satoshi Con"
 }
